@@ -1,6 +1,7 @@
-using IdentityPractice.Components;
-using IdentityPractice.Components.Account;
-using IdentityPractice.Data;
+using IdentityPractice.Web.Components;
+using IdentityPractice.Web.Components.Account;
+using IdentityPractice.Web.Data;
+using IdentityPractice.Web.Endpoints;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -38,7 +39,22 @@ builder.Services.AddIdentityCore<ApplicationUser>(options =>
 
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
 
+// Add this before builder.Build()
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("MauiPolicy", policy =>
+    {
+        policy
+            .WithOrigins("https://localhost") // MAUI's origin
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
+
 var app = builder.Build();
+// Add this after app.Build() but before app.MapRazorComponents() etc.
+app.UseCors("MauiPolicy");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -62,5 +78,8 @@ app.MapRazorComponents<App>()
 
 // Add additional endpoints required by the Identity /Account Razor components.
 app.MapAdditionalIdentityEndpoints();
+
+// At the bottom of Program.cs, before app.Run()
+app.MapAuthEndpoints();
 
 app.Run();

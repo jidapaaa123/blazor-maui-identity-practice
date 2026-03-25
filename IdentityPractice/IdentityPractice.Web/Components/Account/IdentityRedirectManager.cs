@@ -1,8 +1,8 @@
-using IdentityPractice.Data;
+using IdentityPractice.Web.Data;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
 
-namespace IdentityPractice.Components.Account
+namespace IdentityPractice.Web.Components.Account
 {
     internal sealed class IdentityRedirectManager(NavigationManager navigationManager)
     {

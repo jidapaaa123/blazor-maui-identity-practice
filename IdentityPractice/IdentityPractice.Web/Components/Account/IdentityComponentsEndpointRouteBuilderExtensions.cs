@@ -1,6 +1,6 @@
-using IdentityPractice.Components.Account.Pages;
-using IdentityPractice.Components.Account.Pages.Manage;
-using IdentityPractice.Data;
+using IdentityPractice.Web.Components.Account.Pages;
+using IdentityPractice.Web.Components.Account.Pages.Manage;
+using IdentityPractice.Web.Data;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Components.Authorization;

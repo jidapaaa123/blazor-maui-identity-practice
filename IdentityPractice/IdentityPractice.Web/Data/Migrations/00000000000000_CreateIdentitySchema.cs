@@ -3,7 +3,7 @@ using System;
 
 #nullable disable
 
-namespace IdentityPractice.Migrations
+namespace IdentityPractice.Web.Migrations
 {
     /// <inheritdoc />
     public partial class CreateIdentitySchema : Migration

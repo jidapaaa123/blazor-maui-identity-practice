@@ -1,4 +1,4 @@
-namespace IdentityPractice.Components.Account
+namespace IdentityPractice.Web.Components.Account
 {
     public class PasskeyInputModel
     {
