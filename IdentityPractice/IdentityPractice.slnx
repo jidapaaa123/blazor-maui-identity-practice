@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="IdentityPractice.Maui/IdentityPractice.Maui.csproj" />
+  <Project Path="IdentityPractice.Web/IdentityPractice.Web.csproj" />
+</Solution>
