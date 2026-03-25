@@ -1,4 +1,8 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using IdentityPractice.Maui.Auth;
+using IdentityPractice.Maui.Services;
+using IdentityPractice.Shared.Interfaces;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.Extensions.Logging;
 
 namespace IdentityPractice.Maui
 {
@@ -16,9 +20,19 @@ namespace IdentityPractice.Maui
 
             builder.Services.AddMauiBlazorWebView();
 
+            builder.Services.AddHttpClient<IAuthService, AuthService>(client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:7071");
+            });
+
+            builder.Services.AddAuthorizationCore();
+            builder.Services.AddScoped<MauiAuthStateProvider>();
+            builder.Services.AddScoped<AuthenticationStateProvider>(sp =>
+                sp.GetRequiredService<MauiAuthStateProvider>());
+
 #if DEBUG
-    		builder.Services.AddBlazorWebViewDeveloperTools();
-    		builder.Logging.AddDebug();
+            builder.Services.AddBlazorWebViewDeveloperTools();
+            builder.Logging.AddDebug();
 #endif
 
             return builder.Build();
