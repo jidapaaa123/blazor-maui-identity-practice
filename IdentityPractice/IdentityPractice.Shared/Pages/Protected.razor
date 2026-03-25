@@ -1,0 +1,12 @@
+@* IdentityPractice.Shared/Pages/Protected.razor *@
+@page "/protected"
+@using Microsoft.AspNetCore.Components.Authorization
+
+<AuthorizeView>
+    <Authorized>
+        <h3>Welcome! You are logged in.</h3>
+    </Authorized>
+    <NotAuthorized>
+        <h3>You need to log in to see this page.</h3>
+    </NotAuthorized>
+</AuthorizeView>

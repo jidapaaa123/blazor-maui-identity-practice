@@ -1,0 +1,36 @@
+@* IdentityPractice.Shared/Pages/MauiLogin.razor *@
+@page "/mauilogin"
+@using IdentityPractice.Shared.Interfaces
+@using IdentityPractice.Maui.Auth
+@inject IAuthService AuthService
+@inject MauiAuthStateProvider AuthStateProvider
+
+<h3>Login</h3>
+
+<input @bind="email" placeholder="Email" />
+<input @bind="password" type="password" placeholder="Password" />
+<button @onclick="Login">Log In</button>
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <p style="color:red">@errorMessage</p>
+}
+
+@code {
+    private string email = "";
+    private string password = "";
+    private string errorMessage = "";
+
+    private async Task Login()
+    {
+        var result = await AuthService.LoginAsync(email, password);
+        if (result.Success)
+        {
+            AuthStateProvider.NotifyAuthStateChanged();
+        }
+        else
+        {
+            errorMessage = result.ErrorMessage ?? "Login failed.";
+        }
+    }
+}
