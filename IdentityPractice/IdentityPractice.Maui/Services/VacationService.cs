@@ -19,20 +19,18 @@ namespace IdentityPractice.Maui.Services
         public async Task<List<VacationDTO>> GetVacationsAsync()
         {
             var response = await _http.GetAsync("api/vacations");
-            var raw = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
-                throw new Exception(raw);
-            //return new();
-
-            throw new Exception(raw);
+                throw new Exception(await response.Content.ReadAsStringAsync());
 
             return await response.Content.ReadFromJsonAsync<List<VacationDTO>>() ?? new();
         }
 
         public async Task AddVacationAsync(VacationDTO vacation)
         {
-            await _http.PostAsJsonAsync("api/vacations", vacation);
+            var response = await _http.PostAsJsonAsync("api/vacations", vacation);
+            //if (!response.IsSuccessStatusCode)
+                throw new Exception(await response.Content.ReadAsStringAsync());
         }
 
         public async Task DeleteVacationAsync(int id)

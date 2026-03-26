@@ -8,6 +8,14 @@
 
 <h2>My Vacations</h2>
 
+<button @onclick="TestClick">Test</button>
+<p>@testMessage</p>
+
+@if (errorMessage is not null)
+{
+    <p style="color:red">@errorMessage</p>
+}
+
 @if (vacations is null)
 {
     <p>Loading...</p>
@@ -37,8 +45,16 @@ else
 <button @onclick="Add">Add</button>
 
 @code {
+    private string testMessage = "not clicked";
+    
+    void TestClick()
+    {
+        testMessage = "CLICKED!";
+    }
+
     private List<VacationDTO>? vacations;
     private VacationDTO newVacation = new();
+    private string? errorMessage;
 
     protected override async Task OnInitializedAsync()
     {
@@ -47,9 +63,15 @@ else
 
     async Task Add()
     {
-        await VacationService.AddVacationAsync(newVacation);
-        newVacation = new();
-        vacations = await VacationService.GetVacationsAsync();
+        try
+        {
+            await VacationService.AddVacationAsync(newVacation);
+            throw new Exception("I did call .AddVacationAsync()");
+        }
+        catch (Exception ex)
+        {
+            errorMessage = ex.Message;
+        }
     }
 
     async Task Delete(int id)
