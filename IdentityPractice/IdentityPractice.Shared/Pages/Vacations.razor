@@ -46,7 +46,7 @@ else
 
 @code {
     private string testMessage = "not clicked";
-    
+
     void TestClick()
     {
         testMessage = "CLICKED!";
@@ -63,20 +63,15 @@ else
 
     async Task Add()
     {
-        try
-        {
-            await VacationService.AddVacationAsync(newVacation);
-            throw new Exception("I did call .AddVacationAsync()");
-        }
-        catch (Exception ex)
-        {
-            errorMessage = ex.Message;
-        }
+        await VacationService.AddVacationAsync(newVacation);
+        vacations = await VacationService.GetVacationsAsync();
+        StateHasChanged();
     }
 
     async Task Delete(int id)
     {
         await VacationService.DeleteVacationAsync(id);
         vacations = await VacationService.GetVacationsAsync();
+        StateHasChanged();
     }
 }
