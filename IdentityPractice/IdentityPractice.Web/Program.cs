@@ -37,6 +37,13 @@ builder.Services.AddIdentityCore<ApplicationUser>(options =>
     .AddSignInManager()
     .AddDefaultTokenProviders();
 
+// This needs to go **after** your `AddIdentityCore` call.
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.SameSite = SameSiteMode.None;  // allows cross-origin
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // required when SameSite=None
+});
+
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
 
 // Add this before builder.Build()
@@ -82,5 +89,6 @@ app.MapAdditionalIdentityEndpoints();
 
 // At the bottom of Program.cs, before app.Run()
 app.MapAuthEndpoints();
+app.MapVacationEndpoints();
 
 app.Run();
