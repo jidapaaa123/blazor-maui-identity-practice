@@ -5,8 +5,19 @@
 <AuthorizeView>
     <Authorized>
         <h3>Welcome! You are logged in.</h3>
+        <button @onclick="TestClick">Test</button>
+        <p>@testMessage</p>
     </Authorized>
     <NotAuthorized>
         <h3>You need to log in to see this page.</h3>
     </NotAuthorized>
 </AuthorizeView>
+
+@code {
+    private string testMessage = "not clicked";
+    
+    void TestClick()
+    {
+        testMessage = "CLICKED!";
+    }
+}

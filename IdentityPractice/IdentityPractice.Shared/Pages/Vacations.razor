@@ -1,0 +1,77 @@
+﻿@page "/vacations"
+@namespace IdentityPractice.Shared.Pages
+
+@using IdentityPractice.Shared.Interfaces
+@using IdentityPractice.Shared.Models
+@inject IVacationService VacationService
+@inject AuthenticationStateProvider AuthState
+
+<h2>My Vacations</h2>
+
+<button @onclick="TestClick">Test</button>
+<p>@testMessage</p>
+
+@if (errorMessage is not null)
+{
+    <p style="color:red">@errorMessage</p>
+}
+
+@if (vacations is null)
+{
+    <p>Loading...</p>
+}
+else if (!vacations.Any())
+{
+    <p>No vacations yet!</p>
+}
+else
+{
+    <ul>
+        @foreach (var v in vacations)
+        {
+            <li>
+                @v.Place — @v.StartDate.ToString("d") to @v.EndDate.ToString("d")
+                <button @onclick="() => Delete(v.Id)">Delete</button>
+            </li>
+        }
+    </ul>
+}
+
+<hr />
+<h3>Add a Vacation</h3>
+<input @bind="newVacation.Place" placeholder="Place" />
+<input @bind="newVacation.StartDate" type="date" />
+<input @bind="newVacation.EndDate" type="date" />
+<button @onclick="Add">Add</button>
+
+@code {
+    private string testMessage = "not clicked";
+
+    void TestClick()
+    {
+        testMessage = "CLICKED!";
+    }
+
+    private List<VacationDTO>? vacations;
+    private VacationDTO newVacation = new();
+    private string? errorMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        vacations = await VacationService.GetVacationsAsync();
+    }
+
+    async Task Add()
+    {
+        await VacationService.AddVacationAsync(newVacation);
+        vacations = await VacationService.GetVacationsAsync();
+        StateHasChanged();
+    }
+
+    async Task Delete(int id)
+    {
+        await VacationService.DeleteVacationAsync(id);
+        vacations = await VacationService.GetVacationsAsync();
+        StateHasChanged();
+    }
+}
