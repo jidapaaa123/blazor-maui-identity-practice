@@ -11,15 +11,17 @@ public class AuthService : IAuthService
 {
     private readonly HttpClient _httpClient;
     private MauiAuthStateProvider? _authStateProvider;
+    private readonly MauiProgram.CookieContainerHandler _cookieHandler;
 
     public void SetAuthStateProvider(MauiAuthStateProvider provider)
     {
         _authStateProvider = provider;
     }
 
-    public AuthService(HttpClient httpClient)
+    public AuthService(HttpClient httpClient, MauiProgram.CookieContainerHandler cookieHandler)
     {
         _httpClient = httpClient;
+        _cookieHandler = cookieHandler;
     }
 
     public async Task<AuthResult> LoginAsync(string email, string password)
@@ -34,6 +36,15 @@ public class AuthService : IAuthService
 
             if (response.IsSuccessStatusCode)
             {
+                var uri = new Uri("https://localhost:7071");
+                var cookies = _cookieHandler.CookieContainer.GetCookies(uri);
+
+                foreach (System.Net.Cookie cookie in cookies)
+                {
+                    if (cookie.Name == ".AspNetCore.Identity.Application")
+                        await SecureStorage.SetAsync("identity_cookie", cookie.Value);
+                }
+
                 await SecureStorage.SetAsync("is_authenticated", "true");
                 _authStateProvider?.NotifyAuthStateChanged();
                 return new AuthResult { Success = true };

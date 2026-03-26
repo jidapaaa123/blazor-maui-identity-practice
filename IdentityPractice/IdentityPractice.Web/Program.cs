@@ -40,8 +40,21 @@ builder.Services.AddIdentityCore<ApplicationUser>(options =>
 // This needs to go **after** your `AddIdentityCore` call.
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.Cookie.SameSite = SameSiteMode.None;  // allows cross-origin
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // required when SameSite=None
+    options.Cookie.SameSite = SameSiteMode.None;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+
+    // When an API call is unauthorized, return 401 instead of redirecting to /login
+    options.Events.OnRedirectToLogin = context =>
+    {
+        if (context.Request.Path.StartsWithSegments("/api"))
+        {
+            context.Response.StatusCode = 401;
+            return Task.CompletedTask;
+        }
+
+        context.Response.Redirect(context.RedirectUri);
+        return Task.CompletedTask;
+    };
 });
 
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();

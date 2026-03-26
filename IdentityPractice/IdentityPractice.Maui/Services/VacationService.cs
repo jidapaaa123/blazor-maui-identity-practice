@@ -18,7 +18,16 @@ namespace IdentityPractice.Maui.Services
 
         public async Task<List<VacationDTO>> GetVacationsAsync()
         {
-            return await _http.GetFromJsonAsync<List<VacationDTO>>("api/vacations") ?? new();
+            var response = await _http.GetAsync("api/vacations");
+            var raw = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+                throw new Exception(raw);
+            //return new();
+
+            throw new Exception(raw);
+
+            return await response.Content.ReadFromJsonAsync<List<VacationDTO>>() ?? new();
         }
 
         public async Task AddVacationAsync(VacationDTO vacation)
