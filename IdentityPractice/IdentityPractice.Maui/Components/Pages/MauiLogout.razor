@@ -1,0 +1,21 @@
+﻿@* IdentityPractice.Maui/Pages/MauiLogout.razor *@
+@namespace IdentityPractice.Maui.Pages
+@page "/mauilogout"
+@using IdentityPractice.Shared.Interfaces
+@using IdentityPractice.Maui.Auth
+@inject IAuthService AuthService
+@inject MauiAuthStateProvider AuthStateProvider
+@inject NavigationManager Navigation
+
+<h3>Logout</h3>
+
+<button @onclick="Logout">Log Out</button>
+
+@code {
+    private async Task Logout()
+    {
+        await AuthService.LogoutAsync();
+        AuthStateProvider.NotifyAuthStateChanged();
+        Navigation.NavigateTo("/");
+    }
+}
