@@ -1,7 +1,9 @@
+using IdentityPractice.Shared.Interfaces;
 using IdentityPractice.Web.Components;
 using IdentityPractice.Web.Components.Account;
 using IdentityPractice.Web.Data;
 using IdentityPractice.Web.Endpoints;
+using IdentityPractice.Web.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +17,7 @@ builder.Services.AddRazorComponents()
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
+builder.Services.AddScoped<IVacationService, VacationService>();
 
 builder.Services.AddAuthentication(options =>
     {
