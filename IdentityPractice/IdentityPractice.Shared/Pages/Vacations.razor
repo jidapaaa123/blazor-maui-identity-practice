@@ -7,9 +7,6 @@
 
 <h2>My Vacations</h2>
 
-<button @onclick="TestClick">Test</button>
-<p>@testMessage</p>
-
 @if (errorMessage is not null)
 {
     <p style="color:red">@errorMessage</p>
@@ -44,13 +41,6 @@ else
 <button @onclick="Add">Add</button>
 
 @code {
-    private string testMessage = "not clicked";
-
-    void TestClick()
-    {
-        testMessage = "CLICKED!";
-    }
-
     private List<VacationDTO>? vacations;
     private VacationDTO newVacation = new();
     private string? errorMessage;
